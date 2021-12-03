@@ -21,12 +21,12 @@ lgn = True
 
 #untuk memasukkan nilai nilai register dari user
 def register(regis):
-    nama = input("nama         = ")
-    umur = input("umur         = ")
-    lahir = input("alamat        = ")
-    email = input("email        = ")
-    username = input("username     = ")
-    password = input("password     = ")
+    nama = input("Nama         = ")
+    umur = input("Umur         = ")
+    lahir = input("Alamat        = ")
+    email = input("Email        = ")
+    username = input("Username     = ")
+    password = input("Password     = ")
     regis.append({
         "nama":nama,
         "umur" :umur,
@@ -40,30 +40,33 @@ def register(regis):
 #untuk menverifikasi inputan login dengan data register(.json)
 
 def ceklogin():
-   
     print("Amount of User Account",len(user_regis)-1)
     global user_id
     global username
     global password
-    user_id = int(input('user number? ='))
-    username = input("username     =")
-    password = input("password      =")
+    user_id = int(input('User number? ='))
+    username = input("Username     =")
+    password = input("Password      =")
     global lgn
     if user_regis[user_id]["username"] == username and user_regis[user_id]["password"] == password:
         print('Login success\n')  
         lgn = False
     else:
-        print('maybe you put wrong character\ntry again!!')
-        
+        print('You entered the wrong character\nPlease try again!!')
+
 #untuk menampung seluruh nilai/poin yang user pilih dan dijadikan satu untukhasil akhir
 def hasil_daftar():
     print("_"*50)
-    print("nama   :"+user_regis[user_id]["nama"]+"\nservis :"+servis_nilai+"\nPoli   :"+poli_nilai+"\ndokter :"+dokter_nilai+"\njadwal :"+jam_nilai)
+    print("Nama   :"+user_regis[user_id]["nama"]+"\nServis :"+servis_nilai+"\nPoli   :"+poli_nilai+"\nDokter :"+dokter_nilai+"\nJadwal :"+jam_nilai)
 
 #untuk menulis ulang data json atau fungsinya untuk menambahkan nilai baru yang di input kan
 def readdata(file):
     with open(file,'w') as filenya:
         filenya.write(json.dumps(user_regis))
+
+def readdatafinal(file):
+    with open(file,'w') as filenya_janji:
+        filenya_janji.write(json.dumps(janji_regis))
 
 #untuk meload atau membaca file json itu sendiri
 def loadfile(file):
@@ -73,13 +76,13 @@ def loadfile(file):
         else:
             _data = json.load(output)
             return _data
-
 #untuk function yang menampilkan jadwal dokter, agar tidak menulis ulang pada setiap line nya
 def displaytime(no1,no2,hari,jam):
     print('\n')
-    print("| %2s | %-13s | %-15s |"%("no","hari","jam"))
-    print("| %-2s | %-10s | %-15s |"%(no1,hari,jam))
-    print("| %-2s | %-10s | %-15s |"%(no2,hari,jam))
+    
+    print("| {:^3} | {:^18} | {:^25} |".format("No","Hari","Jam"))
+    print(f"| {no1:^3} | {hari:^18} | {jam:^25} |")
+    print(f"| {no2:^3} | {hari:^18} | {jam:^25} |")
     pilih_jadwal = int(input("Choose your appointment [1/2] = "))
     global servis_program
     global jam_nilai
@@ -95,7 +98,7 @@ def displaytime(no1,no2,hari,jam):
         servis_program = False
 
     else:
-        print("tidak ada jadwal")    
+        print("No Schedule")    
     
 #fucntion untuk menampilkan daftar dokter yang ada pada setiap line, agar tidak menulis ulang pada setiap line nya
 def displaydokter(dokter1,dokter2,hari,jam):
@@ -116,39 +119,68 @@ def displaydokter(dokter1,dokter2,hari,jam):
 def countdown(w):
     while w:
         mins, secs = divmod(w, 60)
-        timer = '{}{:02d}:{:02d}'.format("obat sedang dibuat ",mins, secs)
+        timer = '{}{:02d}:{:02d}'.format("Wait for your medicine ",mins, secs)
         print(timer, end="\r")
         time.sleep(1)
         w -= 1
       
-    print("_"*10+'obat sudah siap!')
+    print('Your medicine is ready')
 
 def shoowobat(sirup1,sirup2,pil1,pil2,jmlsir1,jmlsir2,jmlpil1,jmlpil2):
 
-    global nilai_sirup1,nilai_sirup2,nilai_pil1,nilai_pil2
+    global nilai_sirup1,nilai_sirup2,nilai_pil1,nilai_pil2,obat_tersedia
     nilai_sirup1 = sirup1
     nilai_sirup2 = sirup2
     nilai_pil1 = pil1
     nilai_pil2 = pil2
-
-    print("| %2s | %-13s | %-15s |"%("no","sirup","pil"))
-    print("| %-2s | %-10s | %-15s |"%(1,sirup1,pil1))
-    print("| %-2s | %-10s | %-15s |"%("-",jmlsir1,jmlpil1))
-    print("| %-2s | %-10s | %-15s |"%(2,sirup2,pil2))
-    print("| %-2s | %-10s | %-15s |"%("-",jmlsir2,jmlpil2))
+    obat_tersedia="Stok"
+    print("| {:^5} | {:^18} | {:^18} |".format("No","Sirup","Tablet/Kapsul"))
+    print(f"| {1:^5} | {sirup1:^18} | {pil1:^18} |")
+    print(f"| {obat_tersedia:^5} | {jmlsir1:^18} | {jmlpil1:^18} |")
+    print(f"| {2:^5} | {sirup2:^18} | {pil2:^18} |")
+    print(f"| {obat_tersedia:^5} | {jmlsir2:^18} | {jmlpil2:^18} |")
     return sirup1,sirup2,pil1,pil2
   
+# print("Nama   :"+user_regis[user_id]["nama"]+"\nServis :"+servis_nilai+"\nPoli   :"+poli_nilai+"\nDokter :"+dokter_nilai+"\nJadwal :"+jam_nilai)
+def regisjanji(janji):
+    janji.append({
+        "nama":user_regis[user_id]["nama"],
+        "servis": servis_nilai,
+        "Poli": poli_nilai,
+        "Dokter": dokter_nilai,
+        "Jadwal": jam_nilai
+    })
+    return janji
+
+def showapp():
+    print("nama:"+janji_regis[0]["nama"]+" dokter:"+janji_regis[0]["Dokter"]+" jadwal"+janji_regis[0]["Jadwal"])
+
+
+def delete(delvar):
+    sure = input("Are you sure? [y/n]= ")
+    if sure == "y":
+        delvar.pop(0)
+    # os.system('clear')
+    elif sure == "n":
+        global pilih_servis
+        pilih_servis = "1"
+    return delvar
     
 #membuat variabel untuk menampung file .json
+os.system('clear')
 DATA_USER = "data.json"
 user_regis = loadfile(DATA_USER)
+
+DATA_JANJI = "janji.json"
+janji_regis = loadfile(DATA_JANJI)
 
 
 #ketika var lgn benar maka looping untuk pendaftaran akan bejalan
 while lgn ==True:
     print(" 1. Log in")
     print(" 2. Sign up")
-    pil_masuk = input("1/2 = ")
+    print("3. Delete Account")
+    pil_masuk = input("1/2/3 = ")
     if pil_masuk == "1":
         print("="*15+" LOG IN "+"="*15)
         ceklogin()
@@ -168,6 +200,7 @@ print('_'*20+"WHAT CAN I HELP YOU?"+'_'*20)
 print("""
     1. Appointment
     2. Pharmacy
+    3. Cancel Appointment
 """)
 pilih_servis = input('Enter your Choise [1/2/3] = ')
 
@@ -184,64 +217,71 @@ while servis_program:
             3. POLI PENYAKIT DALAM
             4. POLI SARAF
         """)
-        pilih_poli = int(input("Enter your Choise [1/2/3/4/5/6] = "))
+        pilih_poli = int(input("Enter your Choise [1/2/3/4] = "))
         print('\n')
         #note : di displaydokter itu tinggal mengganti isinya saja ,untuk tampilan akan menyesuaikan isi itu
         if pilih_poli == 1:
             poli_nilai = "POLI MATA"
-            displaydokter("dr. Putu Budi Sucitro","dr. Angel Benny","senin - kamis","07:30 - 13:00")
+            displaydokter("dr. Putu Budi Sucitro","dr. Angel Benny","Senin - Kamis","07:30 - 13:00")
         elif pilih_poli == 2:
             poli_nilai = "POLI KULIT"
-            displaydokter("dr. Ciko edo","dr. Angel Benny","senin - kamis","07:30 - 13:00")
+            displaydokter("dr. Ciko edo","dr. Angel Benny","Jumat - Minggu","16:00 - 22:00")
         elif pilih_poli == 3:
             poli_nilai = "POLI PENYAKIT DALAM"
-            displaydokter("dr. Putu Budi Sucitro","dr. Angel Benny","senin - kamis","07:30 - 13:00")
+            displaydokter("dr. Jokowi Dodo" ,"dr. Megawati","Senin - Rabu","08:00 - 11.00")
         elif pilih_poli == 4:
             poli_nilai = "POLI SARAF"
-            displaydokter("dr. Putu Budi Sucitro","dr. Angel Benny","senin - kamis","07:30 - 13:00")
+            displaydokter("dr. Wudd ","dr. Vania","Jumat - Sabtu","19:00 - 22:00")
         else:
             print("POLI SUDAH TUTUP")
+
+        janji_regis = regisjanji(janji_regis)
+        readdatafinal(DATA_JANJI)
 
     elif pilih_servis == "2":
         servis_nilai = "Pharmacy"
         penyakit = input("""
-    keluhan ?
+    Your Complaint ?
     :  """)
         resep_dok = input("""
-    ada resep dokter ?
+    Do you have a Doctor's Presciption ?
     [y/n]: """)
         if resep_dok == "y":
             countdown(int(10))
         elif resep_dok == "n":
-            jmlsir1 = 10
-            jmlsir2 = 10
-            jmlpil1 = 10
-            jmlpil2 = 10
+            jmlsir1 = 20
+            jmlsir2 = 20
+            jmlpil1 = 20
+            jmlpil2 = 20
             
-           
-            shoowobat("[a]inzafnak","[a]fanta","[b]demacolin","[b]bodrex",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
-            pilih_obat = input("pilih obat,ex 2. [b]fanta -> 2b = ")
-            jumlah = int(input("amount ="))
+            shoowobat("[a]Inzafnak","[a]Hufagrip","[b]Demacolin","[b]Pepsi",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
+            pilih_obat = input("pilih obat,ex 2. [b]Demacolin -> 2b = ")
+            jumlah = int(input("Amount ="))
 
-            if jumlah > 10:
-                print("out of stock")
+            if jumlah > 20:
+                print("Out of stock")
             elif pilih_obat == "1a":
                 jmlsir1 -= jumlah
-                print("keluhan anda "+penyakit+" obat anda "+nilai_sirup1)
-                print("pemebelian berhasil")
+                print("Complaint "+penyakit+" Medicine "+nilai_sirup1)
+                print("Your purchase has been completed")
             elif pilih_obat == "1b":
                 jmlpil1 -= jumlah
-                print("keluhan anda "+penyakit+" obat anda "+nilai_pil1)
-                print("pemebelian berhasil")
+                print("Complaint "+penyakit+" Medicine "+nilai_pil1)
+                print("Your purchase has been completed")
             elif pilih_obat == "2a":
                 jmlsir2 -= jumlah
-                print("keluhan anda "+penyakit+" obat anda "+nilai_sirup2)
-                print("pemebelian berhasil")
+                print("Complaint "+penyakit+" Medicine "+nilai_sirup2)
+                print("Your purchase has been completed")
             elif pilih_obat == "2b":
                 jmlpil2 -= jumlah
-                print("keluhan anda "+penyakit+" obat anda "+nilai_pil2)
-                print("pemebelian berhasil")
+                print("Complaint "+penyakit+" Medicine "+nilai_pil2)
+                print("Your purchase has been completed")
 
-            shoowobat("[a]inzafnak","[a]fanta","[b]demacolin","[b]bodrex",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
+            shoowobat("[a]Inzafnak","[a]Hufagrip","[b]Demacolin","[b]Pepsi",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
+    elif pilih_servis == "3":
+        showapp()
+        janji_regis = delete(janji_regis)
+        readdatafinal(DATA_JANJI)
+        # showapp()
     else:
-        print("you entered the wrong number")
+        print("You entered the wrong number")
