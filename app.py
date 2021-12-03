@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 print("""██     ██ ███████ ██       ██████  ██████  ███    ███ ███████ 
 ██     ██ ██      ██      ██      ██    ██ ████  ████ ██      
@@ -110,6 +111,33 @@ def displaydokter(dokter1,dokter2,hari,jam):
     elif pilih_dokter == 2:
         dokter_nilai = dokter2
         displaytime(1,2,hari,jam)
+
+#untuk membuat countdown waktu/timer
+def countdown(w):
+    while w:
+        mins, secs = divmod(w, 60)
+        timer = '{}{:02d}:{:02d}'.format("obat sedang dibuat ",mins, secs)
+        print(timer, end="\r")
+        time.sleep(1)
+        w -= 1
+      
+    print("_"*10+'obat sudah siap!')
+
+def shoowobat(sirup1,sirup2,pil1,pil2,jmlsir1,jmlsir2,jmlpil1,jmlpil2):
+
+    global nilai_sirup1,nilai_sirup2,nilai_pil1,nilai_pil2
+    nilai_sirup1 = sirup1
+    nilai_sirup2 = sirup2
+    nilai_pil1 = pil1
+    nilai_pil2 = pil2
+
+    print("| %2s | %-13s | %-15s |"%("no","sirup","pil"))
+    print("| %-2s | %-10s | %-15s |"%(1,sirup1,pil1))
+    print("| %-2s | %-10s | %-15s |"%("-",jmlsir1,jmlpil1))
+    print("| %-2s | %-10s | %-15s |"%(2,sirup2,pil2))
+    print("| %-2s | %-10s | %-15s |"%("-",jmlsir2,jmlpil2))
+    return sirup1,sirup2,pil1,pil2
+  
     
 #membuat variabel untuk menampung file .json
 DATA_USER = "data.json"
@@ -140,7 +168,6 @@ print('_'*20+"WHAT CAN I HELP YOU?"+'_'*20)
 print("""
     1. Appointment
     2. Pharmacy
-    3. Health support
 """)
 pilih_servis = input('Enter your Choise [1/2/3] = ')
 
@@ -177,9 +204,44 @@ while servis_program:
 
     elif pilih_servis == "2":
         servis_nilai = "Pharmacy"
-        pass
-    elif pilih_servis == "3":
-        servis_nilai = "Health support"
-        pass
+        penyakit = input("""
+    keluhan ?
+    :  """)
+        resep_dok = input("""
+    ada resep dokter ?
+    [y/n]: """)
+        if resep_dok == "y":
+            countdown(int(10))
+        elif resep_dok == "n":
+            jmlsir1 = 10
+            jmlsir2 = 10
+            jmlpil1 = 10
+            jmlpil2 = 10
+            
+           
+            shoowobat("[a]inzafnak","[a]fanta","[b]demacolin","[b]bodrex",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
+            pilih_obat = input("pilih obat,ex 2. [b]fanta -> 2b = ")
+            jumlah = int(input("amount ="))
+
+            if jumlah > 10:
+                print("out of stock")
+            elif pilih_obat == "1a":
+                jmlsir1 -= jumlah
+                print("keluhan anda "+penyakit+" obat anda "+nilai_sirup1)
+                print("pemebelian berhasil")
+            elif pilih_obat == "1b":
+                jmlpil1 -= jumlah
+                print("keluhan anda "+penyakit+" obat anda "+nilai_pil1)
+                print("pemebelian berhasil")
+            elif pilih_obat == "2a":
+                jmlsir2 -= jumlah
+                print("keluhan anda "+penyakit+" obat anda "+nilai_sirup2)
+                print("pemebelian berhasil")
+            elif pilih_obat == "2b":
+                jmlpil2 -= jumlah
+                print("keluhan anda "+penyakit+" obat anda "+nilai_pil2)
+                print("pemebelian berhasil")
+
+            shoowobat("[a]inzafnak","[a]fanta","[b]demacolin","[b]bodrex",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
     else:
         print("you entered the wrong number")
