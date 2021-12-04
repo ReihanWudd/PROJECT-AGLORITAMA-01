@@ -249,10 +249,10 @@ while main_choise:
             servis_nilai = "Appointment"
             print('Choose your complaint')
             print("""
-                1. POLI MATA
-                2. POLI KULIT
-                3. POLI PENYAKIT DALAM
-                4. POLI SARAF
+        1. POLI MATA
+        2. POLI KULIT
+        3. POLI PENYAKIT DALAM
+        4. POLI SARAF
             """)
             pilih_poli = int(input("Enter your Choise [1/2/3/4] = "))
             print('\n')
@@ -314,8 +314,16 @@ while main_choise:
                         print("Complaint "+penyakit+" Medicine "+nilai_pil2)
                         print("Your purchase has been completed")
 
+                    while True:
+                        blanja_obat_exit = input("buy again? y/n = ")
+                        if blanja_obat_exit == "y":
+                            break
+                        elif blanja_obat_exit == "n":
+                            blanja_obat = False
+                            keluar()
+                            break
                     # shoowobat("[a]Inzafnak","[a]Hufagrip","[b]Demacolin","[b]Pepsi",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
-                keluar()
+                
         elif pilih_servis == "3":
             janji_regis = delete(janji_regis)
             readdatafinal(DATA_JANJI)
