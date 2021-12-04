@@ -16,7 +16,7 @@ print("""████████╗ ██████╗      █████�
    ██║   ╚██████╔╝    ╚██████╔╝╚██████╔╝██║  ██║    ███████║███████╗██║  ██║ ╚████╔╝ ██║╚██████╗███████╗███████║
    ╚═╝    ╚═════╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝    ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝ ╚═════╝╚══════╝╚══════╝
                                                                                                                 """)
-print("="*20+'CHOOSE ONE'+"="*20)
+
 lgn = True
 
 #untuk memasukkan nilai nilai register dari user
@@ -153,19 +153,50 @@ def regisjanji(janji):
     return janji
 
 def showapp():
-    print("nama:"+janji_regis[0]["nama"]+" dokter:"+janji_regis[0]["Dokter"]+" jadwal"+janji_regis[0]["Jadwal"])
+    print("nama:"+janji_regis[janji_ke]["nama"]+" dokter:"+janji_regis[janji_ke]["Dokter"]+" jadwal"+janji_regis[janji_ke]["Jadwal"])
+
 
 
 def delete(delvar):
+    print(len(delvar))
+    global janji_ke
+    try:
+        jan_input = int(input("Janji ke? = "))
+        janji_ke = jan_input - 1
+        showapp()
+    except:
+        print("nomor salah / tidak ada")
     sure = input("Are you sure? [y/n]= ")
+    global pilih_servis
+    global servis_program
     if sure == "y":
-        delvar.pop(0)
-    # os.system('clear')
-    elif sure == "n":
-        global pilih_servis
         pilih_servis = "1"
-    return delvar
+        delvar.pop(0)
+        return delvar    
     
+    elif sure == "n":
+        pilih_kluar = int(input("lajut/keluar 1/2 = "))
+        if pilih_kluar == 1:
+            pilih_servis = "1"
+        elif pilih_kluar == 2:
+            servis_program = False
+    
+def keluar():
+    ask_exit = True
+    while ask_exit:
+        tanya_exit = input("EXIT ? y/n = ")
+        global servis_program 
+        global main_choise
+        if tanya_exit == "y":
+            servis_program = False
+            main_choise = False
+            ask_exit = False
+        elif tanya_exit == "n":
+            servis_program = False
+            ask_exit = False
+        else:
+            print("your insert wrong word!!")
+
 #membuat variabel untuk menampung file .json
 os.system('clear')
 DATA_USER = "data.json"
@@ -177,10 +208,10 @@ janji_regis = loadfile(DATA_JANJI)
 
 #ketika var lgn benar maka looping untuk pendaftaran akan bejalan
 while lgn ==True:
+    print("="*20+'CHOOSE ONE'+"="*20)
     print(" 1. Log in")
     print(" 2. Sign up")
-    print("3. Delete Account")
-    pil_masuk = input("1/2/3 = ")
+    pil_masuk = input("1/2 = ")
     if pil_masuk == "1":
         print("="*15+" LOG IN "+"="*15)
         ceklogin()
@@ -195,93 +226,107 @@ while lgn ==True:
     else:
         print("you entered the wrong number")
 
-#pertanyaan untuk memilih jasa yang disediiakan
-print('_'*20+"WHAT CAN I HELP YOU?"+'_'*20)
-print("""
-    1. Appointment
-    2. Pharmacy
-    3. Cancel Appointment
-""")
-pilih_servis = input('Enter your Choise [1/2/3] = ')
+jmlsir1 = 20
+jmlsir2 = 20
+jmlpil1 = 20
+jmlpil2 = 20
+main_choise = True
+while main_choise:
+    #pertanyaan untuk memilih jasa yang disediiakan
+    print('_'*20+"WHAT CAN I HELP YOU?"+'_'*20)
+    print("""
+        1. Appointment
+        2. Pharmacy
+        3. Cancel Appointment
+    """)
+    pilih_servis = input('Enter your Choise [1/2/3] = ')
 
-#looping untuk service program yang dipilih
-servis_program = True
-while servis_program:
-    #kondisi keetika user memilih jasa Appointment
-    if pilih_servis == "1":
-        servis_nilai = "Appointment"
-        print('Choose your complaint')
-        print("""
-            1. POLI MATA
-            2. POLI KULIT
-            3. POLI PENYAKIT DALAM
-            4. POLI SARAF
-        """)
-        pilih_poli = int(input("Enter your Choise [1/2/3/4] = "))
-        print('\n')
-        #note : di displaydokter itu tinggal mengganti isinya saja ,untuk tampilan akan menyesuaikan isi itu
-        if pilih_poli == 1:
-            poli_nilai = "POLI MATA"
-            displaydokter("dr. Putu Budi Sucitro","dr. Angel Benny","Senin - Kamis","07:30 - 13:00")
-        elif pilih_poli == 2:
-            poli_nilai = "POLI KULIT"
-            displaydokter("dr. Ciko edo","dr. Angel Benny","Jumat - Minggu","16:00 - 22:00")
-        elif pilih_poli == 3:
-            poli_nilai = "POLI PENYAKIT DALAM"
-            displaydokter("dr. Jokowi Dodo" ,"dr. Megawati","Senin - Rabu","08:00 - 11.00")
-        elif pilih_poli == 4:
-            poli_nilai = "POLI SARAF"
-            displaydokter("dr. Wudd ","dr. Vania","Jumat - Sabtu","19:00 - 22:00")
-        else:
-            print("POLI SUDAH TUTUP")
+    #looping untuk service program yang dipilih
+    servis_program = True
+    while servis_program:
+        #kondisi keetika user memilih jasa Appointment
+        if pilih_servis == "1":
+            servis_nilai = "Appointment"
+            print('Choose your complaint')
+            print("""
+                1. POLI MATA
+                2. POLI KULIT
+                3. POLI PENYAKIT DALAM
+                4. POLI SARAF
+            """)
+            pilih_poli = int(input("Enter your Choise [1/2/3/4] = "))
+            print('\n')
+            #note : di displaydokter itu tinggal mengganti isinya saja ,untuk tampilan akan menyesuaikan isi itu
+            if pilih_poli == 1:
+                poli_nilai = "POLI MATA"
+                displaydokter("dr. Putu Budi Sucitro","dr. Angel Benny","Senin - Kamis","07:30 - 13:00")
+            elif pilih_poli == 2:
+                poli_nilai = "POLI KULIT"
+                displaydokter("dr. Ciko edo","dr. Angel Benny","Jumat - Minggu","16:00 - 22:00")
+            elif pilih_poli == 3:
+                poli_nilai = "POLI PENYAKIT DALAM"
+                displaydokter("dr. Jokowi Dodo" ,"dr. Megawati","Senin - Rabu","08:00 - 11.00")
+            elif pilih_poli == 4:
+                poli_nilai = "POLI SARAF"
+                displaydokter("dr. Wudd ","dr. Vania","Jumat - Sabtu","19:00 - 22:00")
+            else:
+                print("POLI SUDAH TUTUP")
 
-        janji_regis = regisjanji(janji_regis)
-        readdatafinal(DATA_JANJI)
+            janji_regis = regisjanji(janji_regis)
+            readdatafinal(DATA_JANJI)
 
-    elif pilih_servis == "2":
-        servis_nilai = "Pharmacy"
-        penyakit = input("""
-    Your Complaint ?
-    :  """)
-        resep_dok = input("""
-    Do you have a Doctor's Presciption ?
-    [y/n]: """)
-        if resep_dok == "y":
-            countdown(int(10))
-        elif resep_dok == "n":
-            jmlsir1 = 20
-            jmlsir2 = 20
-            jmlpil1 = 20
-            jmlpil2 = 20
+            keluar()
             
-            shoowobat("[a]Inzafnak","[a]Hufagrip","[b]Demacolin","[b]Pepsi",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
-            pilih_obat = input("pilih obat,ex 2. [b]Demacolin -> 2b = ")
-            jumlah = int(input("Amount ="))
+        elif pilih_servis == "2":
+            servis_nilai = "Pharmacy"
+            penyakit = input("""
+        Your Complaint ?
+        :  """)
+            resep_dok = input("""
+        Do you have a Doctor's Presciption ?
+        [y/n]: """)
+            if resep_dok == "y":
+                countdown(int(10))
+                keluar()
+            elif resep_dok == "n":
+                blanja_obat = True
+                while blanja_obat:
+                    shoowobat("[a]Inzafnak","[a]Hufagrip","[b]Demacolin","[b]Pepsi",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
+                    pilih_obat = input("pilih obat,ex 2. [b]Demacolin -> 2b = ")
+                    jumlah = int(input("Amount ="))
 
-            if jumlah > 20:
-                print("Out of stock")
-            elif pilih_obat == "1a":
-                jmlsir1 -= jumlah
-                print("Complaint "+penyakit+" Medicine "+nilai_sirup1)
-                print("Your purchase has been completed")
-            elif pilih_obat == "1b":
-                jmlpil1 -= jumlah
-                print("Complaint "+penyakit+" Medicine "+nilai_pil1)
-                print("Your purchase has been completed")
-            elif pilih_obat == "2a":
-                jmlsir2 -= jumlah
-                print("Complaint "+penyakit+" Medicine "+nilai_sirup2)
-                print("Your purchase has been completed")
-            elif pilih_obat == "2b":
-                jmlpil2 -= jumlah
-                print("Complaint "+penyakit+" Medicine "+nilai_pil2)
-                print("Your purchase has been completed")
+                    if jumlah > 20:
+                        print("Out of stock")
+                    elif pilih_obat == "1a":
+                        jmlsir1 -= jumlah
+                        print("Complaint "+penyakit+" Medicine "+nilai_sirup1)
+                        print("Your purchase has been completed")
+                    elif pilih_obat == "1b":
+                        jmlpil1 -= jumlah
+                        print("Complaint "+penyakit+" Medicine "+nilai_pil1)
+                        print("Your purchase has been completed")
+                    elif pilih_obat == "2a":
+                        jmlsir2 -= jumlah
+                        print("Complaint "+penyakit+" Medicine "+nilai_sirup2)
+                        print("Your purchase has been completed")
+                    elif pilih_obat == "2b":
+                        jmlpil2 -= jumlah
+                        print("Complaint "+penyakit+" Medicine "+nilai_pil2)
+                        print("Your purchase has been completed")
 
-            shoowobat("[a]Inzafnak","[a]Hufagrip","[b]Demacolin","[b]Pepsi",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
-    elif pilih_servis == "3":
-        showapp()
-        janji_regis = delete(janji_regis)
-        readdatafinal(DATA_JANJI)
-        # showapp()
-    else:
-        print("You entered the wrong number")
+                    # shoowobat("[a]Inzafnak","[a]Hufagrip","[b]Demacolin","[b]Pepsi",jmlsir1,jmlsir2,jmlpil1,jmlpil2)
+                keluar()
+        elif pilih_servis == "3":
+            janji_regis = delete(janji_regis)
+            readdatafinal(DATA_JANJI)
+            keluar()
+        else:
+            print("You entered the wrong number")
+
+print("""████████ ██   ██  █████  ███    ██ ██   ██ ███████ 
+   ██    ██   ██ ██   ██ ████   ██ ██  ██  ██      
+   ██    ███████ ███████ ██ ██  ██ █████   ███████ 
+   ██    ██   ██ ██   ██ ██  ██ ██ ██  ██       ██ 
+   ██    ██   ██ ██   ██ ██   ████ ██   ██ ███████ 
+                                                   
+                                                   """)
